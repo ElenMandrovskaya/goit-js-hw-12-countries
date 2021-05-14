@@ -1,43 +1,34 @@
 import './styles.css';
+import getRefs from './js/getRefs.js';
 import fetchCountries from './js/fetchCountries.js';
 import countriesList from './templates/countriesList.hbs';
 import countryInfo from './templates/countryInfo.hbs';
 import debounce from 'lodash.debounce';
-import { alert, error, defaultModules } from "@pnotify/core/dist/PNotify";
-import * as PNotifyMobile from "@pnotify/mobile/dist/PNotifyMobile";
+import { alert } from "@pnotify/core/dist/PNotify";
 import "../node_modules/@pnotify/core/dist/PNotify.css";
 import '../node_modules/@pnotify/core/dist/BrightTheme.css';
 
-defaultModules.set(PNotifyMobile, {});
-
-const input = document.querySelector('.form-control');
-const results = document.querySelector('.results');
+const refs = getRefs();
 let searchQuery = '';
+refs.input.addEventListener('input', debounce(onSearch, 500));
 
-input.addEventListener('input', debounce(onSearch, 500));
-
-function renderCounriesList(country) {
-    if (country.length === 1) {
+function renderCountries(country) {
+    if (!country) {
+        refs.results.innerHTML = '';
+        return
+    } else if (country.length === 1) {
         const markup = countryInfo(country);
-        results.insertAdjacentHTML('beforeend', markup);
-  } else if (country.length <= 10) {
+        refs.results.insertAdjacentHTML('beforeend', markup);
+    } else if (country.length <= 10) {
         const markup = countriesList(country);
-        results.insertAdjacentHTML('beforeend', markup);
-  } else if (country.length > 10) {
-    alert('To many matches found. Please enter a more specific query!');
-  }
-    
+        refs.results.insertAdjacentHTML('beforeend', markup);
+    } else if (country.length > 10) {
+        alert('Too many matches found. Please enter a more specific query!');
+    } 
 };
 
 function onSearch(e) {
- searchQuery = input.value;
+    searchQuery = refs.input.value;
     fetchCountries(searchQuery)
-        .then(renderCounriesList)
-        .catch(onFetchError)
-    results.innerHTML = '';
-
-};
-
-function onFetchError(error) {
-    alert('ERROR')
+        .then(renderCountries)
 };
