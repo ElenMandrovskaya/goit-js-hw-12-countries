@@ -28,8 +28,8 @@ function renderCountries(country) {
 };
 
 function onSearch(e) {
-    refs.results.innerHTML = ''
-    searchQuery = refs.input.value;
+    refs.results.innerHTML = '';
+    searchQuery = refs.input.value.trim();
     fetchCountries(searchQuery)
         .then(renderCountries)
 };
