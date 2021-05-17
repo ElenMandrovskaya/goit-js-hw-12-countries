@@ -28,6 +28,7 @@ function renderCountries(country) {
 };
 
 function onSearch(e) {
+    refs.results.innerHTML = ''
     searchQuery = refs.input.value;
     fetchCountries(searchQuery)
         .then(renderCountries)
