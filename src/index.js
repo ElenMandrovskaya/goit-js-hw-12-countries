@@ -30,6 +30,10 @@ function renderCountries(country) {
 function onSearch(e) {
     refs.results.innerHTML = '';
     searchQuery = refs.input.value.trim();
+    if (!searchQuery) {
+        return
+    };
+    console.log(searchQuery)
     fetchCountries(searchQuery)
         .then(renderCountries)
 };
