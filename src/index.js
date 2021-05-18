@@ -33,7 +33,7 @@ function onSearch(e) {
     if (!searchQuery) {
         return
     };
-    console.log(searchQuery)
+    // console.log(searchQuery)
     fetchCountries(searchQuery)
         .then(renderCountries)
 };
